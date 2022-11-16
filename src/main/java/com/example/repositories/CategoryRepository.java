@@ -2,16 +2,13 @@ package com.example.repositories;
 
 import com.example.entities.Category;
 import com.example.repositories.dao.CategoryDao;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+@AllArgsConstructor
 public class CategoryRepository implements Repository<Category> {
     private final CategoryDao categoryDao;
-
-    public CategoryRepository(CategoryDao categoryDao) {
-        this.categoryDao = categoryDao;
-    }
-
 
     @Override
     public List<Category> findAll() {

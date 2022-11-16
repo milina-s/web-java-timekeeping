@@ -17,9 +17,8 @@ public class CategoryDao extends DaoImpl<Category> {
 
     @Override
     public Category buildItem(ResultSet rs) throws SQLException {
-        return new Category.CategoryBuilder()
-                .setId(rs.getLong("id"))
-                .setName(rs.getString("name"))
+        return Category.builder()
+                .name(rs.getString("name"))
                 .build();
     }
 
@@ -37,22 +36,18 @@ public class CategoryDao extends DaoImpl<Category> {
 
     @Override
     public String getUpdateSQLQuery() {
-        return "UPDATE " + this.tableName +
-                " SET id = ?, name = ?" +
+        return "UPDATE " + tableName +
+                " SET name = ?" +
                 " WHERE id = ?";
     }
 
     @Override
     public void updateUpdateSQLQuery(PreparedStatement ps, Category newItem, Category oldItem) throws SQLException {
-//        if (newItem.getId() != null) {
-//            ps.setLong(1, newItem.getId());
-//        } else ps.setLong(1, oldItem.getId());
-
         if (newItem.getName() != null) {
-            ps.setString(2, newItem.getName());
-        } else ps.setString(2, oldItem.getName());
+            ps.setString(1, newItem.getName());
+        } else ps.setString(1, oldItem.getName());
 
-        ps.setLong(3, oldItem.getId());
+        ps.setLong(2, oldItem.getId());
     }
 
     @Override
