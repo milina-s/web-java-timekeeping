@@ -60,7 +60,7 @@ public class CategoryDao extends DaoImpl<Category> {
     }
 
     public List<Category> findByName (String name) {
-        String sql = "SELECT * FROM " + tableName + " WHERE name = " + name;
-        return findBy(sql);
+        String sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "'";
+        return findAllBy(sql);
     }
 }

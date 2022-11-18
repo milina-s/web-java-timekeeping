@@ -2,14 +2,16 @@ package com.example.repositories;
 
 import com.example.entities.Request;
 import com.example.repositories.dao.RequestDao;
-import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
 public class RequestRepository implements Repository<Request> {
 
     private final RequestDao requestDao;
+
+    public RequestRepository(RequestDao requestDao) {
+        this.requestDao = requestDao;
+    }
 
     @Override
     public List<Request> findAll() {

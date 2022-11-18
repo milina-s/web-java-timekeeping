@@ -72,7 +72,7 @@ public class ActivityDao extends DaoImpl<Activity> {
     }
 
     public List<Activity> findByName (String name) {
-        String sql = "SELECT * FROM " + tableName + " WHERE name = " + name;
-        return findBy(sql);
+        String sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "'";
+        return findAllBy(sql);
     }
 }

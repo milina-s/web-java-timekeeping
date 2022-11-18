@@ -82,21 +82,21 @@ public class RequestDao extends DaoImpl<Request> {
 
     public List<Request> findByUserId (Long id) {
         String sql = "SELECT * FROM " + tableName + " WHERE user_id = " + id;
-        return findBy(sql);
+        return findAllBy(sql);
     }
 
     public List<Request> findByCategoryId (Long id) {
         String sql = "SELECT * FROM " + tableName + " WHERE category_id = " + id;
-        return findBy(sql);
+        return findAllBy(sql);
     }
 
     public List<Request> findByStatus (RequestStatus status) {
-        String sql = "SELECT * FROM " + tableName + " WHERE status = " + status.name();
-        return findBy(sql);
+        String sql = "SELECT * FROM " + tableName + " WHERE status = '" + status.name() + "'";
+        return findAllBy(sql);
     }
 
     public List<Request> findByType (RequestType type) {
-        String sql = "SELECT * FROM " + tableName + " WHERE type = " + type.name();
-        return findBy(sql);
+        String sql = "SELECT * FROM " + tableName + " WHERE type = '" + type.name() + "'";
+        return findAllBy(sql);
     }
 }
