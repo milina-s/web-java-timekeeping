@@ -3,7 +3,6 @@ package com.example.controllers;
 import com.example.delegator.ServiceDelegator;
 import com.example.entities.UserRole;
 import com.example.services.RegistrationService;
-import com.example.session.CurrentSession;
 import com.example.view.RegistrationView;
 
 public class RegistrationController {
@@ -11,20 +10,22 @@ public class RegistrationController {
     private final RegistrationView registrationView;
     private final RegistrationService registrationService;
 
-    public RegistrationController(ServiceDelegator serviceDelegator, RegistrationView registrationView) throws ClassNotFoundException {
-        this.registrationView = registrationView;
+    public RegistrationController(ServiceDelegator serviceDelegator) throws ClassNotFoundException {
+        registrationView = new RegistrationView();
         registrationService = (RegistrationService) serviceDelegator.getByClass(RegistrationService.class);
     }
 
     public void start() {
-        do {
-            RegistrationAction action = registrationView.chooseAction();
-            switch (action) {
-                case LOGIN -> login();
-                case REGISTER -> register();
-                case GO_BACK -> start();
-            }
-        } while (CurrentSession.getRole().equals(UserRole.NOT_AUTHORIZED));
+        RegistrationAction action;
+        action = registrationView.chooseAction();
+        if (action == null) {
+            registrationView.errorMessage();
+            return;
+        }
+        switch (action) {
+            case LOGIN -> login();
+            case REGISTER -> register();
+        }
     }
 
     public void login() {

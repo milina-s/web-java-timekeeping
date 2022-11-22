@@ -10,6 +10,7 @@ public class Request {
     private Long id;
     private Long activity_id;
     private Long user_id;
+    private int duration;
     private RequestStatus status;
     private RequestType type;
 

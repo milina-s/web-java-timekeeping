@@ -2,8 +2,7 @@ package com.example.entities;
 
 public enum RequestType {
     REMOVE,
-    ADD,
-    UPDATE;
+    ADD;
 
     public static RequestType getRequestType(String value){
         if(value == null){
@@ -12,7 +11,6 @@ public enum RequestType {
         return switch (value){
             case "REMOVE" -> REMOVE;
             case "ADD" -> ADD;
-            case "UPDATE" -> UPDATE;
             default -> null;
         };
     }
