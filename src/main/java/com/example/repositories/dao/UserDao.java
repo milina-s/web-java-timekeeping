@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class UserDao extends DaoImpl<User> {
 
@@ -84,13 +85,13 @@ public class UserDao extends DaoImpl<User> {
         super.update(id, newItem);
     }
 
-    public List<User> findByEmail (String email) {
-        String sql = "SELECT * FROM " + tableName + " WHERE email = " + email;
+    public Optional<User> findByEmail (String email) {
+        String sql = "SELECT * FROM " + tableName + " WHERE email = '" + email + "'";
         return findBy(sql);
     }
 
     public List<User> findByRole (UserRole role) {
-        String sql = "SELECT * FROM " + tableName + " WHERE role = " + role.name();
-        return findBy(sql);
+        String sql = "SELECT * FROM " + tableName + " WHERE role = '" + role.name() + "'";
+        return findAllBy(sql);
     }
 }

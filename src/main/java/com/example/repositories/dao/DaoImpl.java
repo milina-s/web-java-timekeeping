@@ -44,7 +44,7 @@ public abstract class DaoImpl<T> implements Dao<T> {
     public T findById(Long id) {
         T item = null;
         String sql = "SELECT * FROM " + tableName + " WHERE id = " + id;
-        List<T> res = findBy(sql);
+        List<T> res = findAllBy(sql);
         if (res.size() < 1)
             throw new SQLOperationException("Couldn't find item with id=" + id + " in table=" + tableName);
         item = res.get(0);
@@ -74,7 +74,7 @@ public abstract class DaoImpl<T> implements Dao<T> {
 //        return Optional.ofNullable(item);
 //    }
 
-    protected List<T> findBy(String sql) {
+    protected List<T> findAllBy(String sql) {
         List<T> items = new ArrayList<>();
         try {
             Statement statement = this.connection.createStatement();
@@ -88,6 +88,21 @@ public abstract class DaoImpl<T> implements Dao<T> {
             throw new SQLOperationException("Couldn't findBy items in table=" + tableName);
         }
         return items;
+    }
+
+    protected Optional<T> findBy(String sql) {
+        T item = null;
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next()) {
+                item = buildItem(rs);
+            }
+            logger.info("Operation 'findBy' for table=" + tableName + " was successful.");
+        } catch (SQLException e) {
+            throw new SQLOperationException("Couldn't findBy items in table=" + tableName);
+        }
+        return Optional.ofNullable(item);
     }
 
     public abstract String getInsertSQLQuery();

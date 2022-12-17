@@ -2,14 +2,16 @@ package com.example.repositories;
 
 import com.example.entities.Activity;
 import com.example.repositories.dao.ActivityDao;
-import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
 public class ActivityRepository implements Repository<Activity> {
 
     private final ActivityDao activityDao;
+
+    public ActivityRepository(ActivityDao activityDao) {
+        this.activityDao = activityDao;
+    }
 
     @Override
     public List<Activity> findAll() {
