@@ -1,8 +1,13 @@
 package com.example;
 
+import com.example.controllers.MainController;
+import com.example.delegator.DaoDelegator;
+import com.example.delegator.RepositoryDelegator;
+import com.example.delegator.ServiceDelegator;
 import com.example.entities.Category;
 import com.example.repositories.CategoryRepository;
 import com.example.services.CategoryService;
+import com.example.services.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,12 +24,15 @@ public class Main {
         try (Connection connection = DriverManager.getConnection(DB_URL)) {
             System.out.println("Connection to database was successful!");
 
-           // CategoryService categoryServicenew = new CategoryService(new CategoryRepository(connection));
-           // categoryServicenew.create("Games");
+            DaoDelegator daoDelegator = new DaoDelegator(connection);
+            RepositoryDelegator repositoryDelegator = new RepositoryDelegator(daoDelegator);
+            ServiceDelegator serviceDelegator = new ServiceDelegator(repositoryDelegator);
+            MainController mainController = new MainController(serviceDelegator);
+            mainController.start();
 
             logger.info("Action performing is finished.");
-        } catch (SQLException e) {
-            logger.error("Error occurred, see: " + e);
+        } catch (SQLException | ClassNotFoundException e) {
+            logger.error(e);
             throw new RuntimeException(e);
         }
         logger.info("[App] is finished successfully.");
