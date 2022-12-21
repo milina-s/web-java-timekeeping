@@ -1,6 +1,6 @@
 package com.example.delegator;
 
-import com.example.repositories.dao.*;
+import com.example.repositories.*;
 
 import java.sql.Connection;
 import java.util.HashMap;

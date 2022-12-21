@@ -1,4 +1,4 @@
-package com.example.repositories.dao;
+package com.example.repositories;
 
 
 import com.example.exeptions.SQLOperationException;
@@ -41,38 +41,11 @@ public abstract class DaoImpl<T> implements Dao<T> {
     }
 
     @Override
-    public T findById(Long id) {
-        T item = null;
+    public Optional<T> findById(Long id) {
         String sql = "SELECT * FROM " + tableName + " WHERE id = " + id;
-        List<T> res = findAllBy(sql);
-        if (res.size() < 1)
-            throw new SQLOperationException("Couldn't find item with id=" + id + " in table=" + tableName);
-        item = res.get(0);
-        if (res.size() > 1)
-            logger.info("There are many items with id=" + id + " in table=" + tableName + ". The first one has been selected.");
-        if (item == null)
-            throw new SQLOperationException("Couldn't find item with id=" + id + " in table=" + tableName);
-        return item;
+        return findBy(sql);
     }
 
-//    public Optional<T> fidById(Long id) {
-//        T item = null;
-//        String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
-//        try {
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            statement.setLong(1, id);
-//            ResultSet rs = statement.executeQuery(sql);
-//            while (rs.next()) {
-//                item = this.buildItem(rs);
-//            }
-//            rs.close();
-//            statement.close();
-//            logger.info("Operation 'findById' with id=" + id + " for table=" + tableName + " was successful.");
-//        } catch (SQLException e) {
-//            throw new SQLOperationException("Couldn't find item with id=" + id + " in table=" + tableName);
-//        }
-//        return Optional.ofNullable(item);
-//    }
 
     protected List<T> findAllBy(String sql) {
         List<T> items = new ArrayList<>();
@@ -128,7 +101,10 @@ public abstract class DaoImpl<T> implements Dao<T> {
     @Override
     public void update(Long id, T newItem) {
         String sql = getUpdateSQLQuery();
-        T oldItem = findById(id);
+        Optional<T> oldItemOptional = findById(id);
+        if (oldItemOptional.isEmpty())
+            throw new SQLOperationException("Couldn't find item with id=" + id + " in table=" + tableName);
+        T oldItem = oldItemOptional.get();
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             updateUpdateSQLQuery(statement, newItem, oldItem);
             statement.executeUpdate();
@@ -148,5 +124,25 @@ public abstract class DaoImpl<T> implements Dao<T> {
             throw new SQLOperationException("Couldn't delete item with id=" + id + " in table=" + tableName);
         }
     }
+
+
+//    public Optional<T> fidById(Long id) {
+//        T item = null;
+//        String sql = "SELECT * FROM " + tableName + " WHERE id = ?";
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setLong(1, id);
+//            ResultSet rs = statement.executeQuery(sql);
+//            while (rs.next()) {
+//                item = this.buildItem(rs);
+//            }
+//            rs.close();
+//            statement.close();
+//            logger.info("Operation 'findById' with id=" + id + " for table=" + tableName + " was successful.");
+//        } catch (SQLException e) {
+//            throw new SQLOperationException("Couldn't find item with id=" + id + " in table=" + tableName);
+//        }
+//        return Optional.ofNullable(item);
+//    }
 
 }

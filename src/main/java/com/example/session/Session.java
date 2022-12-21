@@ -1,45 +1,45 @@
 package com.example.session;
 
+import com.example.entities.User;
 import com.example.entities.UserRole;
 
 public class Session {
 
-    private String email;
-    private UserRole role;
+    private User user;
     private final Object lock;
 
     public Session() {
-        this.role = UserRole.NOT_AUTHORIZED;
+        this.user = User.builder().role(UserRole.NOT_AUTHORIZED).build();
         lock = new Object();
     }
 
-    public void setRole(UserRole role) {
+    public void setUser(User user) {
         synchronized (lock) {
-            this.role = role;
+            this.user = user;
+        }
+    }
+
+    public User getUser() {
+        synchronized (lock) {
+            return this.user;
+        }
+    }
+
+    public Long getUserId() {
+        synchronized (lock) {
+            return this.user.getId();
         }
     }
 
     public UserRole getRole() {
         synchronized (lock) {
-            return this.role;
-        }
-    }
-
-    public void setEmail(String email) {
-        synchronized (lock) {
-            this.email = email;
-        }
-    }
-
-    public String getEmail() {
-        synchronized (lock) {
-            return this.email;
+            return this.user.getRole();
         }
     }
 
     public void clear() {
         synchronized (lock) {
-            this.role = UserRole.NOT_AUTHORIZED;
+            this.user = User.builder().role(UserRole.NOT_AUTHORIZED).build();
         }
     }
 

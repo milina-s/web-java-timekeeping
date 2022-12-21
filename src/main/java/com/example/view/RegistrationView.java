@@ -1,7 +1,6 @@
 package com.example.view;
 
 import com.example.controllers.RegistrationAction;
-import com.example.entities.User;
 import com.example.entities.UserRole;
 
 import java.util.Arrays;
@@ -13,19 +12,22 @@ public class RegistrationView {
     private final Scanner scanner = new Scanner(System.in);
 
     public RegistrationAction chooseAction() {
-        RegistrationAction action = RegistrationAction.GO_BACK;
-        do {
-            System.out.println("Choose action:");
-            Arrays.stream(RegistrationAction.values()).forEach(System.out::println);
-            action = RegistrationAction.getAction(scanner.nextLine());
-        } while (action.equals(RegistrationAction.GO_BACK));
+        RegistrationAction action;
+        System.out.println("Choose action:");
+        Arrays.stream(RegistrationAction.values()).forEach(System.out::println);
+        action = RegistrationAction.getAction(scanner.nextLine());
         return action;
     }
 
-    public void login () {
+    public void errorMessage() {
+        System.out.println("Something gone wrong.");
+    }
+
+    public void login() {
         System.out.println("Logging in:");
     }
-    public void register () {
+
+    public void register() {
         System.out.println("Registration:");
     }
 
@@ -34,7 +36,7 @@ public class RegistrationView {
         return scanner.nextLine();
     }
 
-    public UserRole getRole () {
+    public UserRole getRole() {
         UserRole role = UserRole.NOT_AUTHORIZED;
         do {
             System.out.print("Choose role: ");
@@ -69,7 +71,7 @@ public class RegistrationView {
         return password;
     }
 
-    public void errorLogin () {
+    public void errorLogin() {
         System.out.println("Wrong email or password");
     }
 

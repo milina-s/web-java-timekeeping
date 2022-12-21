@@ -1,4 +1,4 @@
-package com.example.repositories.dao;
+package com.example.repositories;
 
 import com.example.entities.User;
 import com.example.entities.UserRole;
@@ -20,6 +20,7 @@ public class UserDao extends DaoImpl<User> {
     @Override
     public User buildItem(ResultSet rs) throws SQLException {
         return User.builder()
+                .id(rs.getLong("id"))
                 .name(rs.getString("name"))
                 .lastname(rs.getString("lastname"))
                 .email(rs.getString("email"))

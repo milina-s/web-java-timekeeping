@@ -2,8 +2,7 @@ package com.example.controllers;
 
 public enum RegistrationAction {
     LOGIN,
-    REGISTER,
-    GO_BACK;
+    REGISTER;
 
     public static RegistrationAction getAction(String value){
         if(value == null){
@@ -12,7 +11,7 @@ public enum RegistrationAction {
         return switch (value){
             case "LOGIN" -> LOGIN;
             case "REGISTER" -> REGISTER;
-            default -> GO_BACK;
+            default -> null;
         };
     }
 }

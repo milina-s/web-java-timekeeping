@@ -1,4 +1,4 @@
-package com.example.repositories.dao;
+package com.example.repositories;
 
 import com.example.entities.Request;
 import com.example.entities.RequestStatus;
@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class RequestDao extends DaoImpl<Request> {
 
@@ -46,7 +47,7 @@ public class RequestDao extends DaoImpl<Request> {
     @Override
     public String getUpdateSQLQuery() {
         return "UPDATE " + tableName +
-                " SET activity_id = ?, user_id = ?, status = ?, type = ?" +
+                " SET activity_id = ?, user_id = ?, duration = ?, status = ?, type = ?" +
                 " WHERE id = ?";
     }
 
@@ -60,15 +61,19 @@ public class RequestDao extends DaoImpl<Request> {
             ps.setLong(2, newItem.getUser_id());
         } else ps.setLong(2, oldItem.getUser_id());
 
+        if (newItem.getDuration() != 0) {
+            ps.setInt(3, newItem.getDuration());
+        } else ps.setInt(3, oldItem.getDuration());
+
         if (newItem.getStatus() != null) {
-            ps.setString(3, newItem.getStatus().name());
-        } else ps.setString(3, oldItem.getStatus().name());
+            ps.setString(4, newItem.getStatus().name());
+        } else ps.setString(4, oldItem.getStatus().name());
 
         if (newItem.getType() != null) {
-            ps.setString(4, newItem.getType().name());
-        } else ps.setString(4, oldItem.getType().name());
+            ps.setString(5, newItem.getType().name());
+        } else ps.setString(5, oldItem.getType().name());
 
-        ps.setLong(5, oldItem.getId());
+        ps.setLong(6, oldItem.getId());
     }
 
     @Override
@@ -85,6 +90,11 @@ public class RequestDao extends DaoImpl<Request> {
         return findAllBy(sql);
     }
 
+    public List<Request> findConfirmedByUserId (Long id) {
+        String sql = "SELECT * FROM " + tableName + " WHERE user_id = " + id + " AND status = '" + RequestStatus.CONFIRMED + "'";
+        return findAllBy(sql);
+    }
+
     public List<Request> findByCategoryId (Long id) {
         String sql = "SELECT * FROM " + tableName + " WHERE category_id = " + id;
         return findAllBy(sql);
@@ -98,5 +108,10 @@ public class RequestDao extends DaoImpl<Request> {
     public List<Request> findByType (RequestType type) {
         String sql = "SELECT * FROM " + tableName + " WHERE type = '" + type.name() + "'";
         return findAllBy(sql);
+    }
+
+    public Optional<Request> findByActivityIdAndUserId (Long activity_id, Long user_id) {
+        String sql = "SELECT * FROM " + tableName + " WHERE activity_id = " + activity_id + " AND user_id = " + user_id;
+        return findBy(sql);
     }
 }

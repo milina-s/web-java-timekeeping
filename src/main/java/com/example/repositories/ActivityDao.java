@@ -1,4 +1,4 @@
-package com.example.repositories.dao;
+package com.example.repositories;
 
 import com.example.entities.Activity;
 import com.example.exeptions.SQLOperationException;
@@ -18,30 +18,29 @@ public class ActivityDao extends DaoImpl<Activity> {
     @Override
     public Activity buildItem(ResultSet rs) throws SQLException {
         return Activity.builder()
+                .id(rs.getLong("id"))
                 .name(rs.getString("name"))
                 .category_id(rs.getLong("category_id"))
-                .duration(rs.getInt("duration"))
                 .build();
     }
 
     @Override
     public String getInsertSQLQuery() {
         return "INSERT INTO " + tableName +
-                " (name, category_id, duration)" +
-                " VALUES (?, ?, ?)";
+                " (name, category_id)" +
+                " VALUES (?, ?)";
     }
 
     @Override
     public void updateInsertSQLQuery(PreparedStatement ps, Activity item) throws SQLException {
         ps.setString(1, item.getName());
         ps.setLong(2, item.getCategory_id());
-        ps.setInt(3, item.getDuration());
     }
 
     @Override
     public String getUpdateSQLQuery() {
         return "UPDATE " + tableName +
-                " SET name = ?, category_id = ?, duration = ?" +
+                " SET name = ?, category_id = ?" +
                 " WHERE id = ?";
     }
 
@@ -55,11 +54,7 @@ public class ActivityDao extends DaoImpl<Activity> {
             ps.setString(2, newItem.getName());
         } else ps.setString(2, oldItem.getName());
 
-        if (newItem.getDuration() == 0) {
-            ps.setString(3, newItem.getName());
-        } else ps.setString(3, oldItem.getName());
-
-        ps.setLong(4, oldItem.getId());
+        ps.setLong(3, oldItem.getId());
     }
 
     @Override
@@ -73,6 +68,16 @@ public class ActivityDao extends DaoImpl<Activity> {
 
     public List<Activity> findByName (String name) {
         String sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "'";
+        return findAllBy(sql);
+    }
+
+    public List<Activity> findByCategoryId (Long id) {
+        String sql = "SELECT * FROM " + tableName + " WHERE category_id = " + id;
+        return findAllBy(sql);
+    }
+
+    public List<Activity> findByUserId (Long id) {
+        String sql = "SELECT * FROM " + tableName + " WHERE category_id = " + id;
         return findAllBy(sql);
     }
 }

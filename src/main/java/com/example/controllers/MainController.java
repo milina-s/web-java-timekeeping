@@ -2,26 +2,30 @@ package com.example.controllers;
 
 import com.example.delegator.ServiceDelegator;
 import com.example.session.CurrentSession;
-import com.example.view.RegistrationView;
+import com.example.view.MainView;
 
 
 public class MainController {
 
     private final ServiceDelegator serviceDelegator;
+    private final MainView mainView;
 
     public MainController(ServiceDelegator serviceDelegator) {
         this.serviceDelegator = serviceDelegator;
+        mainView = new MainView();
     }
 
     public void start () throws ClassNotFoundException {
-        authorize();
-        switch (CurrentSession.getRole()){
-            case USER -> startUser();
-            case ADMIN -> startAdmin();
-        }
+        do {
+            authorize();
+            switch (CurrentSession.getRole()) {
+                case USER -> startUser();
+                case ADMIN -> startAdmin();
+            }
+        } while (!mainView.ifLeave());
     }
 
-    public void startUser() {
+    public void startUser() throws ClassNotFoundException {
         UserController userController = new UserController(serviceDelegator);
         userController.start();
     }
@@ -32,7 +36,7 @@ public class MainController {
     }
 
     public void authorize() throws ClassNotFoundException {
-        RegistrationController registrationController = new RegistrationController(serviceDelegator, new RegistrationView());
+        RegistrationController registrationController = new RegistrationController(serviceDelegator);
         registrationController.start();
     }
 

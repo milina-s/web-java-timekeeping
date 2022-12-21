@@ -1,4 +1,4 @@
-package com.example.repositories.dao;
+package com.example.repositories;
 
 import com.example.entities.Category;
 import com.example.exeptions.SQLOperationException;
@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Optional;
 
 public class CategoryDao extends DaoImpl<Category> {
 
@@ -18,6 +18,7 @@ public class CategoryDao extends DaoImpl<Category> {
     @Override
     public Category buildItem(ResultSet rs) throws SQLException {
         return Category.builder()
+                .id(rs.getLong("id"))
                 .name(rs.getString("name"))
                 .build();
     }
@@ -59,8 +60,8 @@ public class CategoryDao extends DaoImpl<Category> {
         super.update(id, newItem);
     }
 
-    public List<Category> findByName (String name) {
+    public Optional<Category> findByName (String name) {
         String sql = "SELECT * FROM " + tableName + " WHERE name = '" + name + "'";
-        return findAllBy(sql);
+        return findBy(sql);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.session;
 
+import com.example.entities.User;
 import com.example.entities.UserRole;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,10 +15,9 @@ public class CurrentSession {
         return session;
     }
 
-    public static void setRole(String email, UserRole role) {
-        session.setRole(role);
-        session.setEmail(email);
-        logger.info("Authorized as " + role + ". Any further operations will be processed by this role.");
+    public static void setUser(User user) {
+        session.setUser(user);
+        logger.info("Authorized as " + user.getName() + ". Any further operations will be processed by this role.");
     }
 
     public static UserRole getRole() {

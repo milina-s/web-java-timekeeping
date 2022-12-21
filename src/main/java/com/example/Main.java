@@ -2,12 +2,7 @@ package com.example;
 
 import com.example.controllers.MainController;
 import com.example.delegator.DaoDelegator;
-import com.example.delegator.RepositoryDelegator;
 import com.example.delegator.ServiceDelegator;
-import com.example.entities.Category;
-import com.example.repositories.CategoryRepository;
-import com.example.services.CategoryService;
-import com.example.services.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,8 +20,7 @@ public class Main {
             System.out.println("Connection to database was successful!");
 
             DaoDelegator daoDelegator = new DaoDelegator(connection);
-            RepositoryDelegator repositoryDelegator = new RepositoryDelegator(daoDelegator);
-            ServiceDelegator serviceDelegator = new ServiceDelegator(repositoryDelegator);
+            ServiceDelegator serviceDelegator = new ServiceDelegator(daoDelegator);
             MainController mainController = new MainController(serviceDelegator);
             mainController.start();
 
